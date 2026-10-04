@@ -1,6 +1,6 @@
 ### Hi, I'm Tarun 👋
 
-Full-stack engineer with an MSc in Cloud Computing (NCI). I build AI-powered products end to end: from the model call to the deploy.
+Full-stack engineer. I build AI-powered products end to end: from the model call to the deploy.
 
 **Currently building**
 
