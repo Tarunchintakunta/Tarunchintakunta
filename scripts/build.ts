@@ -107,7 +107,7 @@ const kicker = (
 	y: number,
 	t: Theme,
 	anchor: "start" | "end" = "start",
-) => text(MONO, s, x, y, 12, t.muted, { anchor, tracking: 0.14 });
+) => text(MONO, s, x, y, 14, t.muted, { anchor, tracking: 0.12 });
 
 function hero(t: Theme, portrait: string) {
 	const size = 96;
@@ -189,15 +189,15 @@ function activity(t: Theme, weeks: Day[][], total: number) {
 			prev = m;
 			if (wi - last < 3 || wi > weeks.length - 3) return "";
 			last = wi;
-			return text(MONO, m, left + wi * step, top + 7 * step + 18, 11, t.muted, {
+			return text(MONO, m, left + wi * step, top + 7 * step + 20, 13, t.muted, {
 				tracking: 0.08,
 			});
 		})
 		.join("");
-	const more = measure(MONO, "MORE", 11, 0.08);
+	const more = measure(MONO, "MORE", 13, 0.08);
 	const legendX = W - PAD - more - 8 - 5 * step;
 	const legend =
-		text(MONO, "LESS", legendX - 8, 126, 11, t.muted, {
+		text(MONO, "LESS", legendX - 8, 126, 13, t.muted, {
 			anchor: "end",
 			tracking: 0.08,
 		}) +
@@ -207,7 +207,7 @@ function activity(t: Theme, weeks: Day[][], total: number) {
 					`<rect x="${legendX + l * step}" y="116" width="${cell}" height="${cell}" rx="2.5" fill="${fill(l)}"/>`,
 			)
 			.join("") +
-		text(MONO, "MORE", W - PAD, 126, 11, t.muted, {
+		text(MONO, "MORE", W - PAD, 126, 13, t.muted, {
 			anchor: "end",
 			tracking: 0.08,
 		});
@@ -230,7 +230,7 @@ function activity(t: Theme, weeks: Day[][], total: number) {
 			`${total.toLocaleString("en-US")} contributions in the last 12 months`,
 			PAD,
 			126,
-			16,
+			18,
 			t.muted,
 		),
 		cells,
@@ -277,7 +277,15 @@ function stats(t: Theme, s: Stats) {
 		},
 		{ label: "PULL REQUESTS", value: String(s.prs), unit: "" },
 		{ label: "REPOS TOUCHED", value: String(s.repos), unit: "" },
-	]
+	];
+	const labelSize = Math.min(
+		13,
+		...tiles.map(
+			(tile) =>
+				(13 * (tileW - 36)) / measure(MONO_MEDIUM, tile.label, 13, 0.04),
+		),
+	);
+	const cards = tiles
 		.map((tile, i) => {
 			const x = PAD + i * (tileW + gap);
 			const accent = i === 0;
@@ -294,7 +302,7 @@ function stats(t: Theme, s: Stats) {
 						sub,
 					)
 				: "";
-			return `<rect x="${x}" y="${top}" width="${tileW}" height="${tileH}" rx="12" fill="${accent ? BLUE[4] : t.tile}"/>${text(MONO_MEDIUM, tile.label, x + 18, top + 28, 10.5, sub, { tracking: 0.1 })}${number}${unit}`;
+			return `<rect x="${x}" y="${top}" width="${tileW}" height="${tileH}" rx="12" fill="${accent ? BLUE[4] : t.tile}"/>${text(MONO_MEDIUM, tile.label, x + 18, top + 30, labelSize, sub, { tracking: 0.04 })}${number}${unit}`;
 		})
 		.join("");
 	const barY = top + tileH + 54;
@@ -313,8 +321,8 @@ function stats(t: Theme, s: Stats) {
 	const legend = s.languages
 		.map((l, i) => {
 			const label = `${l.name} ${Math.round(l.share * 100)}%`;
-			const out = `<circle cx="${lx + 4}" cy="${barY + 36}" r="4" fill="${shades[i]}"/>${text(MONO, label, lx + 14, barY + 40, 12, t.ink)}`;
-			lx += 14 + measure(MONO, label, 12) + 26;
+			const out = `<circle cx="${lx + 4}" cy="${barY + 36}" r="4" fill="${shades[i]}"/>${text(MONO, label, lx + 14, barY + 41, 14, t.ink)}`;
+			lx += 14 + measure(MONO, label, 14) + 24;
 			return out;
 		})
 		.join("");
@@ -332,7 +340,7 @@ function stats(t: Theme, s: Stats) {
 		kicker("BY THE NUMBERS", PAD, 56, t),
 		kicker("@TARUNCHINTAKUNTA", W - PAD, 56, t, "end"),
 		title,
-		tiles,
+		cards,
 		kicker("TOP LANGUAGES", PAD, barY - 16, t),
 		bar,
 		legend,
